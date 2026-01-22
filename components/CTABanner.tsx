@@ -52,7 +52,7 @@ const CTABanner = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white font-semibold">
                 <span className="flex items-center space-x-3">
-                  <span>Let's Talk</span>
+                  <span>Let&apos;s Talk</span>
                   <ArrowRight className="w-5 h-5" />
                 </span>
               </span>

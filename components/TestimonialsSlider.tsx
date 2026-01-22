@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Quote } from 'lucide-react';
-import Image from 'next/image';
 
 const TestimonialsSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -69,7 +68,7 @@ const TestimonialsSlider = () => {
 
                   {/* Quote Text */}
                   <blockquote className="text-2xl md:text-3xl font-semibold text-gray-900 leading-relaxed max-w-3xl mx-auto">
-                    "{testimonial.quote}"
+                    &quot;{testimonial.quote}&quot;
                   </blockquote>
 
                   {/* Author Info */}
