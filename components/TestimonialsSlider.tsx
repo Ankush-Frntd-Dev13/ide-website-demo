@@ -1,9 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useRef, useState, useCallback } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
 import { Quote } from 'lucide-react';
 
+import 'swiper/css';
+
 const TestimonialsSlider = () => {
+  const swiperRef = useRef<SwiperType | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const testimonials = [
@@ -35,65 +41,70 @@ const TestimonialsSlider = () => {
     { name: 'Quotient', logo: '⭕' },
   ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
+  const handleSlideChange = useCallback((swiper: SwiperType) => {
+    setCurrentSlide(swiper.realIndex);
+  }, []);
 
-    return () => clearInterval(timer);
-  }, [testimonials.length]);
+  const goToSlide = useCallback((index: number) => {
+    swiperRef.current?.slideToLoop(index);
+  }, []);
 
   return (
     <section className="relative py-20 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Testimonial Slider */}
         <div className="relative mb-16">
-          <div className="relative min-h-[300px] flex items-center justify-center">
+          <Swiper
+            modules={[Autoplay]}
+            onSwiper={(swiper) => { swiperRef.current = swiper; }}
+            onSlideChange={handleSlideChange}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            loop
+            className="min-h-[300px]"
+          >
             {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-all duration-700 ${
-                  index === currentSlide
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-              >
-                <div className="text-center space-y-8">
-                  {/* Quote Icon */}
-                  <div className="flex justify-center">
-                    <div className="p-4 bg-purple-100 rounded-full">
-                      <Quote className="w-8 h-8 text-purple-600" />
-                    </div>
-                  </div>
-
-                  {/* Quote Text */}
-                  <blockquote className="text-2xl md:text-3xl font-semibold text-gray-900 leading-relaxed max-w-3xl mx-auto">
-                    &quot;{testimonial.quote}&quot;
-                  </blockquote>
-
-                  {/* Author Info */}
-                  <div className="flex flex-col items-center space-y-3">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden">
-                      <div className="w-full h-full flex items-center justify-center text-white text-2xl font-bold">
-                        {testimonial.author.charAt(0)}
+              <SwiperSlide key={index}>
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center space-y-8">
+                    {/* Quote Icon */}
+                    <div className="flex justify-center">
+                      <div className="p-4 bg-purple-100 rounded-full">
+                        <Quote className="w-8 h-8 text-purple-600" />
                       </div>
                     </div>
-                    <div>
-                      <p className="font-semibold text-gray-900">{testimonial.author}</p>
-                      <p className="text-sm text-gray-600">{testimonial.role}</p>
+
+                    {/* Quote Text */}
+                    <blockquote className="text-2xl md:text-3xl font-semibold text-gray-900 leading-relaxed max-w-3xl mx-auto">
+                      &quot;{testimonial.quote}&quot;
+                    </blockquote>
+
+                    {/* Author Info */}
+                    <div className="flex flex-col items-center space-y-3">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden">
+                        <div className="w-full h-full flex items-center justify-center text-white text-2xl font-bold">
+                          {testimonial.author.charAt(0)}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">{testimonial.author}</p>
+                        <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
 
           {/* Pagination Dots */}
           <div className="flex justify-center space-x-2 mt-8">
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentSlide(index)}
+                onClick={() => goToSlide(index)}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   index === currentSlide
                     ? 'w-8 bg-purple-600'

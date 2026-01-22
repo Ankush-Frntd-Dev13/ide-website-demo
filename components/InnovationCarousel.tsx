@@ -1,9 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useRef, useState, useCallback } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+import 'swiper/css';
+
 const InnovationCarousel = () => {
+  const swiperRef = useRef<SwiperType | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
 
@@ -31,34 +37,26 @@ const InnovationCarousel = () => {
     },
   ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setCurrentIndex((current) => (current + 1) % slides.length);
-          return 0;
-        }
-        return prev + 1;
-      });
-    }, 50);
-
-    return () => clearInterval(timer);
-  }, [slides.length]);
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
+  const handleSlideChange = useCallback((swiper: SwiperType) => {
+    setCurrentIndex(swiper.realIndex);
     setProgress(0);
-  };
+  }, []);
 
-  const nextSlide = () => {
-    setCurrentIndex((current) => (current + 1) % slides.length);
-    setProgress(0);
-  };
+  const handleAutoplayTimeLeft = useCallback((_swiper: SwiperType, _timeLeft: number, percentage: number) => {
+    setProgress((1 - percentage) * 100);
+  }, []);
 
-  const prevSlide = () => {
-    setCurrentIndex((current) => (current - 1 + slides.length) % slides.length);
-    setProgress(0);
-  };
+  const goToSlide = useCallback((index: number) => {
+    swiperRef.current?.slideToLoop(index);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    swiperRef.current?.slideNext();
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    swiperRef.current?.slidePrev();
+  }, []);
 
   return (
     <section className="relative py-20 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
@@ -70,7 +68,7 @@ const InnovationCarousel = () => {
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
                 {slides[currentIndex].title}
               </h2>
-              
+
               <p className="text-lg text-gray-600 leading-relaxed">
                 {slides[currentIndex].description}
               </p>
@@ -97,7 +95,7 @@ const InnovationCarousel = () => {
                       className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden"
                     >
                       <div
-                        className={`h-full bg-gradient-to-r ${slides[index].color} transition-all duration-300`}
+                        className={`h-full bg-gradient-to-r ${slides[index].color} transition-all duration-100`}
                         style={{
                           width: index === currentIndex ? `${progress}%` : index < currentIndex ? '100%' : '0%',
                         }}
@@ -126,27 +124,33 @@ const InnovationCarousel = () => {
 
           {/* Right Content - Image Carousel */}
           <div className="relative">
-            <div className="relative aspect-square rounded-3xl overflow-hidden">
-              {slides.map((slide, index) => (
-                <div
-                  key={index}
-                  className={`absolute inset-0 transition-all duration-700 ${
-                    index === currentIndex
-                      ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-95'
-                  }`}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-pink-900/50" />
-                  <div className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold">
-                    Slide {index + 1}
+            <Swiper
+              modules={[Autoplay]}
+              onSwiper={(swiper) => { swiperRef.current = swiper; }}
+              onSlideChange={handleSlideChange}
+              onAutoplayTimeLeft={handleAutoplayTimeLeft}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              loop
+              className="aspect-square rounded-3xl overflow-hidden"
+            >
+              {slides.map((_, index) => (
+                <SwiperSlide key={index}>
+                  <div className="relative w-full h-full">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-pink-900/50" />
+                    <div className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold">
+                      Slide {index + 1}
+                    </div>
                   </div>
-                </div>
+                </SwiperSlide>
               ))}
-            </div>
+            </Swiper>
 
             {/* Decorative Elements */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl transform rotate-12 animate-float" />
-            <div className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-pulse" />
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl transform rotate-12 animate-float z-10" />
+            <div className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-pulse z-10" />
           </div>
         </div>
       </div>
