@@ -3,7 +3,7 @@ import HeroSection from '@/components/HeroSection';
 import StickyScrollSection from '@/components/StickyScrollSection';
 import InnovationCarousel from '@/components/InnovationCarousel';
 import CommitmentSection from '@/components/CommitmentSection';
-import LeadershipSection from '@/components/LeadershipSection';
+import ProgressCarousel from '@/components/ProgressCarousel';
 import TestimonialsSlider from '@/components/TestimonialsSlider';
 import CTABanner from '@/components/CTABanner';
 import Footer from '@/components/Footer';
@@ -16,7 +16,7 @@ export default function Home() {
       <StickyScrollSection />
       <InnovationCarousel />
       <CommitmentSection />
-      <LeadershipSection />
+      <ProgressCarousel />
       <TestimonialsSlider />
       <CTABanner />
       <Footer />
