@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 import 'swiper/css';
 
@@ -16,24 +17,21 @@ const InnovationCarousel = () => {
   const slides = [
     {
       title: 'Favoriser l\'innovation et la technologie',
-      description: 'Découvrez le potentiel de votre entreprise grâce à des insights pilotés par l\'IA qui permettent une meilleure prise de décision et ouvrent de nouvelles opportunités de croissance.',
-      highlight: 'De la génération d\'image unique pilotée par l\'IA aux intégrations complexes, nous vous aidons à adopter la technologie qui compte en concevant un écosystème spécifiquement adapté à vos besoins.',
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80',
-      color: 'from-purple-600 to-pink-600',
+      description: 'Débloquez le potentiel de votre entreprise grâce aux insights du marché et aux stratégies d\'approvisionnement',
+      cardText: 'De la génération de contenu pilotée par l\'IA aux expériences immersives en réalité virtuelle et à la gestion des droits numériques alimentée par la blockchain, De la génération de contenu pilotée par l\'IA aux expériences immersives en réalité virtuelle et à la gestion des droits numériques alimentée par la blockchain,',
+      image: 'https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?w=800&q=80',
     },
     {
-      title: 'Sustainable Growth',
-      description: 'Build lasting value through strategic innovation and sustainable business practices.',
-      highlight: 'Our approach focuses on long-term impact, creating solutions that grow with your business.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
-      color: 'from-blue-600 to-cyan-600',
+      title: 'Croissance Durable',
+      description: 'Construisez une valeur durable grâce à l\'innovation stratégique et aux pratiques commerciales durables.',
+      cardText: 'En comprenant et en exploitant les besoins des clients, les entreprises peuvent créer une valeur tangible et de la satisfaction, conduisant à des relations mutuellement bénéfiques qui se traduisent par une croissance durable.',
+      image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80',
     },
     {
-      title: 'Digital Transformation',
-      description: 'Transform your business with cutting-edge technology and innovative strategies.',
-      highlight: 'We help organizations navigate the digital landscape with confidence and expertise.',
+      title: 'Transformation Digitale',
+      description: 'Transformez votre entreprise avec une technologie de pointe et des stratégies innovantes.',
+      cardText: 'Nous aidons les organisations à naviguer dans le paysage numérique avec confiance et expertise, en créant des solutions personnalisées qui répondent à vos besoins uniques.',
       image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
-      color: 'from-indigo-600 to-purple-600',
     },
   ];
 
@@ -46,10 +44,6 @@ const InnovationCarousel = () => {
     setProgress((1 - percentage) * 100);
   }, []);
 
-  const goToSlide = useCallback((index: number) => {
-    swiperRef.current?.slideToLoop(index);
-  }, []);
-
   const nextSlide = useCallback(() => {
     swiperRef.current?.slideNext();
   }, []);
@@ -59,71 +53,22 @@ const InnovationCarousel = () => {
   }, []);
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
+    <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-slate-50 to-blue-50/30 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="space-y-8">
-            <div className="space-y-6">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                {slides[currentIndex].title}
-              </h2>
-
-              <p className="text-lg text-gray-600 leading-relaxed">
-                {slides[currentIndex].description}
-              </p>
-
-              <div className="p-6 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl">
-                <p className="text-white leading-relaxed">
-                  {slides[currentIndex].highlight}
-                </p>
-              </div>
-            </div>
-
-            {/* Progress Indicators */}
-            <div className="flex items-center space-x-4">
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center justify-between text-sm text-gray-600">
-                  <span>0{currentIndex + 1}</span>
-                  <span>/ 0{slides.length}</span>
-                </div>
-                <div className="flex space-x-2">
-                  {slides.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToSlide(index)}
-                      className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden"
-                    >
-                      <div
-                        className={`h-full bg-gradient-to-r ${slides[index].color} transition-all duration-100`}
-                        style={{
-                          width: index === currentIndex ? `${progress}%` : index < currentIndex ? '100%' : '0%',
-                        }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex space-x-2">
-                <button
-                  onClick={prevSlide}
-                  className="p-2 border-2 border-gray-300 rounded-full hover:border-gray-400 transition-colors duration-200"
-                >
-                  <ChevronLeft className="w-5 h-5 text-gray-600" />
-                </button>
-                <button
-                  onClick={nextSlide}
-                  className="p-2 border-2 border-gray-300 rounded-full hover:border-gray-400 transition-colors duration-200"
-                >
-                  <ChevronRight className="w-5 h-5 text-gray-600" />
-                </button>
-              </div>
-            </div>
+        {/* Main Content Grid */}
+        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12">
+          {/* Left Content - Title and Description */}
+          <div className="lg:w-[32%] flex-shrink-0">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight mb-4 lg:mb-6 transition-all duration-500">
+              {slides[currentIndex].title}
+            </h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed transition-all duration-500">
+              {slides[currentIndex].description}
+            </p>
           </div>
 
-          {/* Right Content - Image Carousel */}
-          <div className="relative">
+          {/* Right Content - Carousel */}
+          <div className="lg:w-[68%] flex-grow -mr-4 sm:-mr-6 lg:-mr-8">
             <Swiper
               modules={[Autoplay]}
               onSwiper={(swiper) => { swiperRef.current = swiper; }}
@@ -133,24 +78,116 @@ const InnovationCarousel = () => {
                 delay: 5000,
                 disableOnInteraction: false,
               }}
+              slidesPerView={1.2}
+              spaceBetween={12}
+              centeredSlides={false}
               loop
-              className="aspect-square rounded-3xl overflow-hidden"
+              breakpoints={{
+                480: {
+                  slidesPerView: 1.3,
+                  spaceBetween: 16,
+                },
+                640: {
+                  slidesPerView: 1.4,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 1.5,
+                  spaceBetween: 24,
+                },
+              }}
+              className="overflow-visible"
             >
-              {slides.map((_, index) => (
+              {slides.map((slide, index) => (
                 <SwiperSlide key={index}>
-                  <div className="relative w-full h-full">
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-pink-900/50" />
-                    <div className="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold">
-                      Slide {index + 1}
+                  {({ isActive }) => (
+                    <div
+                      className={`relative rounded-2xl lg:rounded-3xl overflow-hidden transition-all duration-500 ${
+                        isActive
+                          ? 'shadow-2xl scale-100 opacity-100'
+                          : 'shadow-lg scale-[0.85] opacity-60'
+                      }`}
+                      style={{
+                        aspectRatio: '4/3',
+                        transformOrigin: 'left center'
+                      }}
+                    >
+                      {/* Background Image */}
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 80vw, 50vw"
+                      />
+
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+                      {/* Card Text Content */}
+                      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 lg:p-5">
+                        <div className="bg-black/70 backdrop-blur-sm rounded-xl p-3 sm:p-4 lg:p-5 shadow-lg">
+                          <p className="text-white/90 text-xs sm:text-sm lg:text-base leading-relaxed line-clamp-4 sm:line-clamp-5 lg:line-clamp-6">
+                            {slide.cardText}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </SwiperSlide>
               ))}
             </Swiper>
+          </div>
+        </div>
 
-            {/* Decorative Elements */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl transform rotate-12 animate-float z-10" />
-            <div className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-pulse z-10" />
+        {/* Bottom Section - Progress Bar and Navigation */}
+        <div className="mt-8 lg:mt-12">
+          <div className="flex items-center gap-4 sm:gap-6 lg:gap-8">
+            {/* Progress Bar */}
+            <div className="flex-1">
+              <div className="flex gap-1.5 sm:gap-2">
+                {slides.map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden"
+                  >
+                    <div
+                      className="h-full bg-blue-600 rounded-full transition-all duration-100"
+                      style={{
+                        width: index === currentIndex
+                          ? `${progress}%`
+                          : index < currentIndex
+                            ? '100%'
+                            : '0%',
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation Controls */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={prevSlide}
+                className="p-2 border border-gray-300 rounded-full hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+              </button>
+
+              <span className="text-sm text-gray-600 font-medium min-w-[36px] text-center">
+                {currentIndex + 1}/{slides.length}
+              </span>
+
+              <button
+                onClick={nextSlide}
+                className="p-2 border border-gray-300 rounded-full hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
